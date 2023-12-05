@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
 
-  <title>Document</title>
-</head>
-<body>
-  
-  <script src="script.js"></script>
-</body>
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="post-section-btn">Create Post</button>
+    <form id="post-section" style="display: none">
+      <h3>Title</h3>
+      <input type="text" id="title" />
+      <h3>Tags</h3>
+      <input type="text" id="tags" />
+      <h3>Text</h3>
+      <input type="text" id="text" />
+      <input type="submit" id="submit-button" value="Submit" />
+    </form>
+    <div id="posts"></div>
+
+    <script src="script.js"></script>
+  </body>
 </html>

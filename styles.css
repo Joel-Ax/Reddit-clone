@@ -1,0 +1,14 @@
+body {
+  margin-top: 5rem;
+  margin-left: 20rem;
+  margin-right: 20rem;
+}
+
+input {
+  width: 40rem;
+  height: 1.5rem;
+}
+
+#text {
+  height: 10rem;
+}

@@ -1,3 +1,8 @@
+let postBtn = document.getElementById("post-section-btn");
+let postSctn = document.getElementById("post-section");
+let submitBtn = document.getElementById("submit-button");
+let postsWrapper = document.getElementById("posts");
+
 async function fetchPosts() {
   let res = await fetch("https://dummyjson.com/posts");
   let json = await res.json();
@@ -7,38 +12,66 @@ async function fetchPosts() {
   return json.posts;
 }
 
-function renderPosts(posts) {
-  let wrapper = document.createElement("div");
-  document.body.append(wrapper);
+postBtn.addEventListener("click", toggleNewPost);
 
-  for (let i = 0; i < posts.length; i++) {
-    let post = posts[i];
-    let postContainer = document.createElement("div");
-
-    let title = document.createElement("h3");
-    title.innerText = post.title;
-
-    let postSection = document.createElement("p");
-    postSection.innerText = post.body;
-
-    let divTags = document.createElement("div");
-
-    //Loop to create as many span elements that is needed (depending on how many tags there is)
-    //containing a tag inside the divTags element
-    for (let i = 0; i < post.tags.length; i++) {
-      let tag = document.createElement("span");
-      tag.innerText = ` #${post.tags[i]}`;
-      divTags.append(tag);
-    }
-
-    wrapper.append(postContainer);
-    postContainer.append(title, postSection, divTags);
+function toggleNewPost() {
+  if (postSctn.style.display === "none") {
+    postSctn.style.display = "block";
+    postBtn.innerText = "Close";
+  } else {
+    postSctn.style.display = "none";
+    postBtn.innerText = "Create Post";
   }
+}
+
+function renderPosts(posts) {
+  for (let i = 0; i < posts.length; i++) {
+    renderPost(posts[i]);
+  }
+}
+
+function renderPost(post) {
+  let postContainer = document.createElement("div");
+
+  let title = document.createElement("h3");
+  title.innerText = post.title;
+
+  let postText = document.createElement("p");
+  postText.innerText = post.body;
+
+  let divTags = document.createElement("div");
+  //Loop to create as many span elements that is needed (depending on how many tags there is)
+  //containing a tag inside the divTags element
+  for (let i = 0; i < post.tags.length; i++) {
+    let tag = document.createElement("span");
+    tag.innerText = ` #${post.tags[i]}`;
+    divTags.append(tag);
+  }
+  postsWrapper.prepend(postContainer);
+  postContainer.append(title, postText, divTags);
 }
 
 async function loadPage() {
   let posts = await fetchPosts();
   renderPosts(posts);
 }
+
+//Function for saving value
+function submitPost(event) {
+  event.preventDefault();
+  let postTitleInput = document.getElementById("title");
+  let postTagsInput = document.getElementById("tags");
+  let postTextInput = document.getElementById("text");
+  let userPost = {
+    title: postTitleInput.value,
+    tags: postTagsInput.value.trim().split(" "),
+    body: postTextInput.value,
+  };
+  renderPost(userPost);
+  postSctn.reset();
+  toggleNewPost();
+}
+
+postSctn.addEventListener("submit", submitPost);
 
 loadPage();
