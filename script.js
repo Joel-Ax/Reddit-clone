@@ -47,8 +47,21 @@ function renderPost(post) {
     tag.innerText = ` #${post.tags[i]}`;
     divTags.append(tag);
   }
+  let reactionContainer = document.createElement("div");
+
+  let reaction = document.createElement("div");
+  reaction.innerText = post.reactions;
+
+  let reactionBtn = document.createElement("button");
+  reactionBtn.innerText = "Like";
+
+  reactionBtn.addEventListener("click", function () {
+    reaction.innerText++;
+  });
+
   postsWrapper.prepend(postContainer);
-  postContainer.append(title, postText, divTags);
+  postContainer.append(title, postText, divTags, reactionContainer);
+  reactionContainer.append(reaction, reactionBtn);
 }
 
 async function loadPage() {
@@ -56,7 +69,7 @@ async function loadPage() {
   renderPosts(posts);
 }
 
-//Function for saving value
+//Function for user posts
 function submitPost(event) {
   event.preventDefault();
   let postTitleInput = document.getElementById("title");
