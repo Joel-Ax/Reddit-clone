@@ -3,12 +3,21 @@ let postSctn = document.getElementById("post-section");
 let submitBtn = document.getElementById("submit-button");
 let postsWrapper = document.getElementById("posts");
 
+let posts = [];
+
+let localPosts = localStorage.getItem("posts");
+if (localPosts !== null) {
+  posts = JSON.parse(localPosts);
+  renderPosts(posts);
+} else {
+  loadPage();
+}
+
 async function fetchPosts() {
   let res = await fetch("https://dummyjson.com/posts");
   let json = await res.json();
-  /*Rather than using .then as a promise I'm using an async function and
-  await to make the code easier to read, they essentially do
-  the same thing*/
+
+  storePosts(json.posts);
   return json.posts;
 }
 
@@ -31,6 +40,11 @@ function renderPosts(posts) {
   }
 }
 
+function storePosts(posts) {
+  localStorage.setItem("posts", JSON.stringify(posts));
+  console.log(localStorage);
+}
+
 function renderPost(post) {
   let postContainer = document.createElement("div");
 
@@ -41,6 +55,7 @@ function renderPost(post) {
   postText.innerText = post.body;
 
   let divTags = document.createElement("div");
+  console.log(post);
   //Loop to create as many span elements that is needed (depending on how many tags there is)
   //containing a tag inside the divTags element
   for (let i = 0; i < post.tags.length; i++) {
@@ -86,17 +101,15 @@ function submitPost(event) {
     title: postTitleInput.value,
     tags: postTagsInput.value.trim().split(" "),
     body: postTextInput.value,
-    reactions: "0",
+    reactions: 0,
   };
+
+  posts.push(userPost);
+  storePosts(posts);
+
   renderPost(userPost);
   postSctn.reset();
   toggleNewPost();
 }
 
-/*let json = JSON.stringify(title.value);
-let value = JSON.parse(json);
-localStorage.setItem("userTitles", title.value); */
-
 postSctn.addEventListener("submit", submitPost);
-
-loadPage();
