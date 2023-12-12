@@ -14,6 +14,7 @@ async function fetchPosts() {
 
 postBtn.addEventListener("click", toggleNewPost);
 
+//Display settings for create post window
 function toggleNewPost() {
   if (postSctn.style.display === "none") {
     postSctn.style.display = "block";
@@ -52,16 +53,22 @@ function renderPost(post) {
   let reaction = document.createElement("div");
   reaction.innerText = post.reactions;
 
-  let reactionBtn = document.createElement("button");
-  reactionBtn.innerText = "Like";
+  let reactionLikeBtn = document.createElement("button");
+  reactionLikeBtn.innerText = "👍";
 
-  reactionBtn.addEventListener("click", function () {
+  let reactionDislikeBtn = document.createElement("button");
+  reactionDislikeBtn.innerText = "👎";
+
+  reactionLikeBtn.addEventListener("click", function () {
     reaction.innerText++;
+  });
+  reactionDislikeBtn.addEventListener("click", function () {
+    reaction.innerText--;
   });
 
   postsWrapper.prepend(postContainer);
   postContainer.append(title, postText, divTags, reactionContainer);
-  reactionContainer.append(reaction, reactionBtn);
+  reactionContainer.append(reaction, reactionLikeBtn, reactionDislikeBtn);
 }
 
 async function loadPage() {
@@ -79,11 +86,16 @@ function submitPost(event) {
     title: postTitleInput.value,
     tags: postTagsInput.value.trim().split(" "),
     body: postTextInput.value,
+    reactions: "0",
   };
   renderPost(userPost);
   postSctn.reset();
   toggleNewPost();
 }
+
+/*let json = JSON.stringify(title.value);
+let value = JSON.parse(json);
+localStorage.setItem("userTitles", title.value); */
 
 postSctn.addEventListener("submit", submitPost);
 
