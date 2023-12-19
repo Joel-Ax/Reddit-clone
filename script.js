@@ -1,9 +1,12 @@
+//General variables
 let postBtn = document.getElementById("post-section-btn");
 let postSctn = document.getElementById("post-section");
 let submitBtn = document.getElementById("submit-button");
 let postsWrapper = document.getElementById("posts");
 
 let posts = [];
+
+console.log(posts);
 
 let localPosts = localStorage.getItem("posts");
 if (localPosts !== null) {
@@ -20,7 +23,6 @@ async function fetchPosts() {
   storePosts(json.posts);
   return json.posts;
 }
-
 postBtn.addEventListener("click", toggleNewPost);
 
 //Display settings for create post window
@@ -34,15 +36,16 @@ function toggleNewPost() {
   }
 }
 
+function storePosts(posts) {
+  localStorage.setItem("posts", JSON.stringify(posts));
+  console.log(localStorage);
+}
+
+//Loop to render all posts
 function renderPosts(posts) {
   for (let i = 0; i < posts.length; i++) {
     renderPost(posts[i]);
   }
-}
-
-function storePosts(posts) {
-  localStorage.setItem("posts", JSON.stringify(posts));
-  console.log(localStorage);
 }
 
 function renderPost(post) {
@@ -55,7 +58,6 @@ function renderPost(post) {
   postText.innerText = post.body;
 
   let divTags = document.createElement("div");
-  console.log(post);
   //Loop to create as many span elements that is needed (depending on how many tags there is)
   //containing a tag inside the divTags element
   for (let i = 0; i < post.tags.length; i++) {
@@ -76,15 +78,22 @@ function renderPost(post) {
 
   reactionLikeBtn.addEventListener("click", function () {
     reaction.innerText++;
+    post.reactions++;
+    storePosts(posts);
   });
+
   reactionDislikeBtn.addEventListener("click", function () {
     reaction.innerText--;
+    post.reactions--;
+    storePosts(posts);
   });
 
   postsWrapper.prepend(postContainer);
   postContainer.append(title, postText, divTags, reactionContainer);
   reactionContainer.append(reaction, reactionLikeBtn, reactionDislikeBtn);
 }
+
+function reactionLike() {}
 
 async function loadPage() {
   let posts = await fetchPosts();
