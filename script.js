@@ -6,8 +6,6 @@ let postsWrapper = document.getElementById("posts");
 
 let posts = [];
 
-console.log(posts);
-
 let localPosts = localStorage.getItem("posts");
 if (localPosts !== null) {
   posts = JSON.parse(localPosts);
@@ -38,7 +36,6 @@ function toggleNewPost() {
 
 function storePosts(posts) {
   localStorage.setItem("posts", JSON.stringify(posts));
-  console.log(localStorage);
 }
 
 //Loop to render all posts
